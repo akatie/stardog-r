@@ -24,6 +24,12 @@ import org.openrdf.model.Value;
 
 import static com.complexible.common.rdf.model.Values.literal;
 
+import org.rosuda.JRI.Rengine;
+import org.rosuda.JRI.REXP;
+import org.rosuda.JRI.RList;
+import org.rosuda.JRI.RVector;
+import org.rosuda.JRI.RMainLoopCallbacks;
+
 /**
  * <p>SameDistribution SPARQL custom function - runs wilcox.test in R</p>
  *
@@ -33,18 +39,24 @@ import static com.complexible.common.rdf.model.Values.literal;
  *
  */
 public final class SameDistribution extends AbstractFunction {
+    // this function from a SPARQL query: `bind(stardog:titleCase(?var) as ?tc)`
+    protected SameDistribution() {
+	super(1 /* takes a single argument */, Namespaces.STARDOG+"sameDistribution");
+    }
 
-	// this function from a SPARQL query: `bind(stardog:titleCase(?var) as ?tc)`
-	protected SameDistribution() {
-		super(1 /* takes a single argument */, Namespaces.STARDOG+"sameDistribution");
-	}
+    @Override
+    protected Value internalEvaluate(final Value... theArgs) throws FunctionEvaluationException {
+	System.out.println(System.getProperty("java.library.path"));
+	
+	// Start JRI R session
+	Rengine re = new Rengine (new String [] {"--vanilla"}, false, null);
 
-	@Override
-	protected Value internalEvaluate(final Value... theArgs) throws FunctionEvaluationException {
-		// Verify that the single input argument is a plain literal, or an xsd:string.
-		assertStringLiteral(theArgs[0]);
-
-		// We know that we have a string, so let's just title case it and return it.
-		return literal(Strings2.toTitleCase(theArgs[0].stringValue()), StardogValueFactory.XSD.STRING);
-	}
+	re.assign("x", new double[] {1.5, 2.5, 3.5});
+	REXP result = re.eval("(sum(x))");
+	System.out.println(result.asDouble());
+	re.end();
+	
+	// We know that we have a string, so let's just title case it and return it.
+	return literal(result.asDouble());
+    }
 }
