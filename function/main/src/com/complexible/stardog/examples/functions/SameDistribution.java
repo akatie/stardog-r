@@ -49,7 +49,9 @@ public final class SameDistribution extends AbstractFunction {
 	System.out.println(System.getProperty("java.library.path"));
 	
 	// Start JRI R session
-	Rengine re = new Rengine (new String [] {"--vanilla"}, false, null);
+	Rengine re = Rengine.getMainEngine();
+	if(re == null)
+	    re = new Rengine(new String[] {"--vanilla"}, false, null);
 
 	re.assign("x", new double[] {1.5, 2.5, 3.5});
 	REXP result = re.eval("(sum(x))");
