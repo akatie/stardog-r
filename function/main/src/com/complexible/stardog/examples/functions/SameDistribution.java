@@ -46,8 +46,6 @@ public final class SameDistribution extends AbstractFunction {
 
     @Override
     protected Value internalEvaluate(final Value... theArgs) throws FunctionEvaluationException {
-	System.out.println(System.getProperty("java.library.path"));
-	
 	// Start JRI R session
 	Rengine re = Rengine.getMainEngine();
 	if(re == null)
@@ -55,7 +53,6 @@ public final class SameDistribution extends AbstractFunction {
 
 	re.assign("x", new double[] {1.5, 2.5, 3.5});
 	REXP result = re.eval("(sum(x))");
-	System.out.println(result.asDouble());
 	re.end();
 	
 	// We know that we have a string, so let's just title case it and return it.
