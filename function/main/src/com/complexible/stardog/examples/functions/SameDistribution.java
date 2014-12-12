@@ -30,6 +30,8 @@ import org.rosuda.JRI.RList;
 import org.rosuda.JRI.RVector;
 import org.rosuda.JRI.RMainLoopCallbacks;
 
+import java.util.Vector;
+
 /**
  * <p>SameDistribution SPARQL custom function - runs wilcox.test in R</p>
  *
@@ -54,8 +56,9 @@ public final class SameDistribution extends AbstractFunction {
 	re.assign("x", new double[] {1.5, 2.5, 3.5});
 	REXP result = re.eval("(sum(x))");
 	re.end();
+
+	System.out.println(theArgs[0]);
 	
-	// We know that we have a string, so let's just title case it and return it.
 	return literal(result.asDouble());
     }
 }
