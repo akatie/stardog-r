@@ -22,6 +22,8 @@ import com.complexible.common.rdf.query.resultio.TextTableQueryResultWriter;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
 import com.complexible.stardog.api.SelectQuery;
+import com.complexible.stardog.api.admin.AdminConnection;
+import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
 import com.complexible.stardog.plan.filter.functions.AbstractFunction;
 import com.complexible.stardog.plan.filter.functions.FunctionEvaluationException;
 import com.complexible.stardog.StardogException;
@@ -68,6 +70,7 @@ public final class SameDistribution extends AbstractFunction {
 	    aConn = ConnectionConfiguration
 		.to("people")
 		.credentials("admin", "admin")
+		.server("snarl://localhost:5820")
 		.connect();
 
 	    SelectQuery aQuery = aConn.select("select * where { ?s ?p ?o }");
