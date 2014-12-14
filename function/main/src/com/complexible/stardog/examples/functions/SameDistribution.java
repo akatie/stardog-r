@@ -28,6 +28,8 @@ import com.complexible.stardog.plan.filter.functions.AbstractFunction;
 import com.complexible.stardog.plan.filter.functions.FunctionEvaluationException;
 import com.complexible.stardog.StardogException;
 
+import org.openrdf.model.impl.ValueFactoryImpl;
+import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.query.resultio.QueryResultIO;
 import org.openrdf.query.TupleQueryResult;
@@ -42,7 +44,8 @@ import org.rosuda.JRI.RList;
 import org.rosuda.JRI.RVector;
 import org.rosuda.JRI.RMainLoopCallbacks;
 
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.IOException;
 
 /**
@@ -55,15 +58,20 @@ import java.io.IOException;
  */
 public final class SameDistribution extends AbstractFunction {
     // accumulation of bindings
-    private Vector<Value> accBindings = new Vector<Value>();
+    private List<Value> accBindings = new ArrayList<Value>();
+    private List<Double> sampleA = new ArrayList<Double>();
+    private List<Double> sampleB = new ArrayList<Double>();
 
     // this function from a SPARQL query: `bind(stardog:titleCase(?var) as ?tc)`
     protected SameDistribution() {
-	super(1 /* takes a single argument */, Namespaces.STARDOG+"sameDistribution");
+	super(3, Namespaces.STARDOG+"sameDistribution");
     }
 
     @Override
     protected Value internalEvaluate(final Value... theArgs) throws FunctionEvaluationException {
+	URI sliceURI = ValueFactoryImpl.getInstance()
+	    .createURI("http://purl.org/linked-data/cube#Slice");
+
 	// Using SNARL API to open connection to the db to run our own SPARQL queries
 	Connection aConn = null;
 	try {
@@ -73,12 +81,16 @@ public final class SameDistribution extends AbstractFunction {
 		.server("snarl://localhost:5820")
 		.connect();
 
-	    SelectQuery aQuery = aConn.select("select * where { ?s ?p ?o }");
-	    aQuery.limit(10);
+	    // Check argument is a slice
+	    SelectQuery aQuery = aConn.select("select ?type where { ?s ?p ?type }");
+	    aQuery.parameter("s", theArgs[0]);
+	    aQuery.parameter("type", sliceURI);
 	    TupleQueryResult aResult = aQuery.execute();
 
 	    try {
-		System.out.println("The first ten results...");
+		if (!aResult.hasNext())
+		    throw new FunctionEvaluationException("This function only accepts slices as arguments");
+		System.out.println("Checking slice qb:Slice type...");
 		QueryResultIO.write(aResult, TextTableQueryResultWriter.FORMAT, System.out);
 		aResult.close();
 	    } catch (IOException e) {
@@ -89,6 +101,38 @@ public final class SameDistribution extends AbstractFunction {
 		System.err.println(e.getMessage());
 	    }
 
+	    // Go for dimension values of all observations of the slice
+	    SelectQuery valQuery = aConn.select("select ?val where { ?s qb:observation ?obs . ?obs ?dim ?val . }");
+	    valQuery.parameter("s", theArgs[0]);
+	    valQuery.parameter("dim", theArgs[2]);
+	    TupleQueryResult valResult = valQuery.execute();
+
+	    try {
+		while (valResult.hasNext()) {
+		    sampleA.add(Double.parseDouble(valResult.next().getValue("val").stringValue()));
+		}
+		for (int i=0; i < sampleA.size(); i++) {
+		    System.out.println(sampleA.get(i));
+		}
+	    } catch (QueryEvaluationException e) {
+		System.err.println(e.getMessage());
+	    }
+
+	    valQuery.parameter("s", theArgs[1]);
+	    valResult = valQuery.execute();
+	    try {
+		while (valResult.hasNext()) {
+		    sampleB.add(Double.parseDouble(valResult.next().getValue("val").stringValue()));
+		}
+		for (int i=0; i < sampleB.size(); i++) {
+		    System.out.println(sampleB.get(i));
+		}
+		valResult.close();
+	    } catch (QueryEvaluationException e) {
+		System.err.println(e.getMessage());
+	    }
+
+	    // Closing the SNARL connection
 	    aConn.close();
 	} catch (StardogException e) {
 	    System.err.println(e.getMessage());
@@ -101,7 +145,7 @@ public final class SameDistribution extends AbstractFunction {
 	if(re == null)
 	    re = new Rengine(new String[] {"--vanilla"}, false, null);
 
-	re.assign("x", new double[] {1.5, 2.5, 3.5});
+	re.assign("x", sampleA);
 	REXP result = re.eval("(sum(x))");
 	re.end();
 
