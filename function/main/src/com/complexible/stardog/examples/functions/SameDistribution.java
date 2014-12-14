@@ -145,8 +145,19 @@ public final class SameDistribution extends AbstractFunction {
 	if(re == null)
 	    re = new Rengine(new String[] {"--vanilla"}, false, null);
 
-	re.assign("x", sampleA);
-	REXP result = re.eval("(sum(x))");
+	
+	double[] aSampleA = new double[sampleA.size()];
+	double[] aSampleB = new double[sampleB.size()];
+	for (int i=0; i < sampleA.size(); i++) {
+	    aSampleA[i] = sampleA.get(i);
+	}
+	for (int i=0; i < sampleB.size(); i++) {
+	    aSampleB[i] = sampleB.get(i);
+	}
+
+	re.assign("x", aSampleA);
+	re.assign("y", aSampleB);
+	REXP result = re.eval("(wilcox.test(x,y))");
 	re.end();
 
 	accBindings.add(theArgs[0]);
