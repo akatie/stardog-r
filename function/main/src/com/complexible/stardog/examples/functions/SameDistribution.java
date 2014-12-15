@@ -156,7 +156,8 @@ public final class SameDistribution extends AbstractFunction {
 
 	re.assign("x", aSampleA);
 	re.assign("y", aSampleB);
-	REXP result = re.eval("(wilcox.test(x,y))");
+	REXP result = re.eval("(wilcox.test(x,y)$p.value)");
+	System.out.println(result);
 	re.end();
 
 	return literal(result.asDouble());
