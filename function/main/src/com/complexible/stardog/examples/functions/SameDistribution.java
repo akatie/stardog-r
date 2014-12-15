@@ -57,8 +57,7 @@ import java.io.IOException;
  *
  */
 public final class SameDistribution extends AbstractFunction {
-    // accumulation of bindings
-    private List<Value> accBindings = new ArrayList<Value>();
+    // slice samples
     private List<Double> sampleA = new ArrayList<Double>();
     private List<Double> sampleB = new ArrayList<Double>();
 
@@ -160,13 +159,6 @@ public final class SameDistribution extends AbstractFunction {
 	REXP result = re.eval("(wilcox.test(x,y))");
 	re.end();
 
-	accBindings.add(theArgs[0]);
-
-	System.out.println("== Starting accBindings dump ==");
-	for (int i=0; i < accBindings.size(); i++)
-	    System.out.println(accBindings.get(i));
-	System.out.println("== Finishing accBindings dump ==");
-	
 	return literal(result.asDouble());
     }
 }
