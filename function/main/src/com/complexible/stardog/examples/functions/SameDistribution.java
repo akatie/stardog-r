@@ -68,8 +68,13 @@ public final class SameDistribution extends AbstractFunction {
 
     @Override
     protected Value internalEvaluate(final Value... theArgs) throws FunctionEvaluationException {
+	// URI for slice
 	URI sliceURI = ValueFactoryImpl.getInstance()
 	    .createURI("http://purl.org/linked-data/cube#Slice");
+
+	// Clear samples
+	sampleA = new ArrayList<Double>();
+	sampleB = new ArrayList<Double>();
 
 	// Using SNARL API to open connection to the db to run our own SPARQL queries
 	Connection aConn = null;
