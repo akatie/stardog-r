@@ -63,7 +63,7 @@ public final class R extends AbstractFunction {
 
     // this function from a SPARQL query: `bind(stardog:titleCase(?var) as ?tc)`
     protected R() {
-	super(3, Namespaces.STARDOG+"R");
+	super(4, Namespaces.STARDOG+"R");
     }
 
     @Override
@@ -87,7 +87,7 @@ public final class R extends AbstractFunction {
 
 	    // Check argument is a slice
 	    SelectQuery aQuery = aConn.select("select ?type where { ?s ?p ?type }");
-	    aQuery.parameter("s", theArgs[0]);
+	    aQuery.parameter("s", theArgs[1]);
 	    aQuery.parameter("type", sliceURI);
 	    TupleQueryResult aResult = aQuery.execute();
 
@@ -107,8 +107,8 @@ public final class R extends AbstractFunction {
 
 	    // Go for dimension values of all observations of the slice
 	    SelectQuery valQuery = aConn.select("select ?val where { ?s qb:observation ?obs . ?obs ?dim ?val . }");
-	    valQuery.parameter("s", theArgs[0]);
-	    valQuery.parameter("dim", theArgs[2]);
+	    valQuery.parameter("s", theArgs[1]);
+	    valQuery.parameter("dim", theArgs[3]);
 	    TupleQueryResult valResult = valQuery.execute();
 
 	    try {
@@ -122,7 +122,7 @@ public final class R extends AbstractFunction {
 		System.err.println(e.getMessage());
 	    }
 
-	    valQuery.parameter("s", theArgs[1]);
+	    valQuery.parameter("s", theArgs[2]);
 	    valResult = valQuery.execute();
 	    try {
 		while (valResult.hasNext()) {
@@ -161,7 +161,8 @@ public final class R extends AbstractFunction {
 
 	re.assign("x", aSampleA);
 	re.assign("y", aSampleB);
-	REXP result = re.eval("(wilcox.test(x,y)$p.value)");
+	// Care for R injection!
+	REXP result = re.eval("(" + theArgs[0] + "(x,y)$p.value)");
 	System.out.println(result);
 	re.end();
 
