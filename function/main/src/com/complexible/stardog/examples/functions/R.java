@@ -56,14 +56,14 @@ import java.io.IOException;
  * @version 1.0
  *
  */
-public final class SameDistribution extends AbstractFunction {
+public final class R extends AbstractFunction {
     // slice samples
     private List<Double> sampleA = new ArrayList<Double>();
     private List<Double> sampleB = new ArrayList<Double>();
 
     // this function from a SPARQL query: `bind(stardog:titleCase(?var) as ?tc)`
-    protected SameDistribution() {
-	super(3, Namespaces.STARDOG+"sameDistribution");
+    protected R() {
+	super(3, Namespaces.STARDOG+"R");
     }
 
     @Override
