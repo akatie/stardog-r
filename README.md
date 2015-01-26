@@ -5,7 +5,7 @@ Stardog extension wrapping R function calls as SPARQL custom functions.
 
 ## About
 
-This extension expands the standard functionality of SPARQL in [Stardog](http://www.stardog.com/)'s query engine. 
+This extension expands the standard functionality of SPARQL in [Stardog](http://www.stardog.com/)'s query engine, by allowing R functions (such as test statistics) to be called directly from the SPARQL query.
 
 ## Build and Setup
 
