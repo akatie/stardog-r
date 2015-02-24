@@ -18,7 +18,7 @@
 
 	<property file="../project.properties"/>
 
-	<property name="project.name" value="stardog-function-examples"/>
+	<property name="project.name" value="stardog-R-aggregates"/>
 	<property name="project.version" value="1.0"/>
 
 	<include file="../ivy.build.xml"/>
@@ -81,7 +81,7 @@
 		<junit fork="yes" printsummary="yes" haltonfailure="yes" failureproperty="junit.failure" showoutput="true">
 			<jvmarg value="-Dstardog.home=${stardog.home}"/>
 
-			<test name="com.complexible.stardog.examples.functions.TestTitleCaseFunction"/>
+			<test name="com.complexible.stardog.plan.aggregates.TestRFunction"/>
 
 			<formatter type="brief" usefile="false"/>
 

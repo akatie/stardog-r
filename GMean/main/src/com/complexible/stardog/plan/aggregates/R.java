@@ -24,23 +24,23 @@ import static com.complexible.common.rdf.model.Values.literal;
  * @since   3.0
  * @version 3.0
  */
-public final class GMean extends AbstractAggregate {
+public final class R extends AbstractAggregate {
 	private Root mRoot;
 	private Multiply mProduct;
-
 	private Count mCount;
 
 	private Value mCurr = null;
 
-	public GMean() {
-		super(Namespaces.STARDOG + "gmean");
+	public R() {
+		super(Namespaces.STARDOG + "R");
 
 		mCount = new Count();
 		mRoot = new Root();
 		mProduct = new Multiply();
+		System.out.println("Initializing aggregate class...");
 	}
 
-	protected GMean(final GMean theAgg) {
+	protected R(final R theAgg) {
 		super(theAgg);
 
 		mCount = new Count();
@@ -94,6 +94,7 @@ public final class GMean extends AbstractAggregate {
 		}
 
 		mCount.aggregate(theValue, theMultiplicity);
+		System.out.println(theValue);
 
 		if (mCurr == null) {
 			mCurr = theValue;
@@ -109,7 +110,7 @@ public final class GMean extends AbstractAggregate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public GMean copy() {
-		return new GMean(this);
+	public R copy() {
+		return new R(this);
 	}
 }
