@@ -33,19 +33,11 @@ public final class R extends AbstractAggregate {
 
 	public R() {
 		super(Namespaces.STARDOG + "R");
-
-		mCount = new Count();
-		mRoot = new Root();
-		mProduct = new Multiply();
 		System.out.println("Initializing aggregate class...");
 	}
 
 	protected R(final R theAgg) {
 		super(theAgg);
-
-		mCount = new Count();
-		mRoot = new Root();
-		mProduct = new Multiply();
 	}
 
 	/**
@@ -54,10 +46,6 @@ public final class R extends AbstractAggregate {
 	@Override
 	public void initialize() {
 		super.initialize();
-
-		mCount.initialize();
-		mRoot.initialize();
-		mProduct.initialize();
 	}
 
 	/**
@@ -65,10 +53,7 @@ public final class R extends AbstractAggregate {
 	 */
 	@Override
 	public void setArgs(final List<Expression> theArgs) {
-		Preconditions.checkArgument(theArgs.size() == 1, "Geometric mean aggregate function takes only one argument, %d found", theArgs.size());
 		super.setArgs(theArgs);
-
-		mCount.setArgs(theArgs);
 	}
 
 	/**
@@ -76,12 +61,7 @@ public final class R extends AbstractAggregate {
 	 */
 	@Override
 	protected Value _getValue() throws ExpressionEvaluationException {
-		if (mCurr == null) {
-			return literal("0D");
-		}
-		else {
-			return mRoot.evaluate(mCurr, mCount.get());
-		}
+		return literal("0D");
 	}
 
 	/**
@@ -89,21 +69,6 @@ public final class R extends AbstractAggregate {
 	 */
 	@Override
 	protected void aggregate(final Value theValue, final long theMultiplicity) throws ExpressionEvaluationException {
-		if (!(theValue instanceof Literal)) {
-			throw new ExpressionEvaluationException("Invalid argument to " + getName() + " argument MUST be a literal value, was: " + theValue);
-		}
-
-		mCount.aggregate(theValue, theMultiplicity);
-		System.out.println(theValue);
-
-		if (mCurr == null) {
-			mCurr = theValue;
-		}
-		else {
-			mCurr = mProduct.evaluate(theMultiplicity == 1
-			                          ? theValue
-			                          : mProduct.evaluate(theValue, literal(theMultiplicity)), mCurr);
-		}
 	}
 
 	/**
