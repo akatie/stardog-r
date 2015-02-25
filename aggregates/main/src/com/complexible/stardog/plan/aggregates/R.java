@@ -9,10 +9,6 @@ import java.util.List;
 import com.complexible.common.rdf.model.Namespaces;
 import com.complexible.stardog.plan.filter.Expression;
 import com.complexible.stardog.plan.filter.ExpressionEvaluationException;
-import com.complexible.stardog.plan.filter.functions.numeric.Multiply;
-import com.complexible.stardog.plan.filter.functions.numeric.Root;
-import com.google.common.base.Preconditions;
-import org.openrdf.model.Literal;
 import org.openrdf.model.Value;
 
 import static com.complexible.common.rdf.model.Values.literal;
@@ -25,14 +21,9 @@ import static com.complexible.common.rdf.model.Values.literal;
  * @version 3.0
  */
 public final class R extends AbstractAggregate {
-	private Root mRoot;
-	private Multiply mProduct;
-	private Count mCount;
 
-	private Value mCurr = null;
-
-	public R() {
-		super(Namespaces.STARDOG + "R");
+	public R() {		
+		super(Namespaces.STARDOG + "myagg");
 		System.out.println("Initializing aggregate class...");
 	}
 

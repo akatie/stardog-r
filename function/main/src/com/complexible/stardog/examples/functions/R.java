@@ -24,8 +24,9 @@ import com.complexible.stardog.api.ConnectionConfiguration;
 import com.complexible.stardog.api.SelectQuery;
 import com.complexible.stardog.api.admin.AdminConnection;
 import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
+import com.complexible.stardog.plan.filter.ExpressionVisitor;
 import com.complexible.stardog.plan.filter.functions.AbstractFunction;
-import com.complexible.stardog.plan.filter.functions.FunctionEvaluationException;
+import com.complexible.stardog.plan.filter.functions.Function;
 import com.complexible.stardog.StardogException;
 
 import org.openrdf.model.impl.ValueFactoryImpl;
@@ -67,7 +68,7 @@ public final class R extends AbstractFunction {
     }
 
     @Override
-    protected Value internalEvaluate(final Value... theArgs) throws FunctionEvaluationException {
+    protected Value internalEvaluate(final Value... theArgs) {
 	// URI for slice
 	URI sliceURI = ValueFactoryImpl.getInstance()
 	    .createURI("http://purl.org/linked-data/cube#Slice");
@@ -92,8 +93,6 @@ public final class R extends AbstractFunction {
 	    TupleQueryResult aResult = aQuery.execute();
 
 	    try {
-		if (!aResult.hasNext())
-		    throw new FunctionEvaluationException("This function only accepts slices as arguments");
 		System.out.println("Checking slice qb:Slice type...");
 		QueryResultIO.write(aResult, TextTableQueryResultWriter.FORMAT, System.out);
 		aResult.close();
@@ -168,4 +167,16 @@ public final class R extends AbstractFunction {
 
 	return literal(result.asDouble());
     }
+
+	@Override
+	public Function copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void accept(ExpressionVisitor arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 }
