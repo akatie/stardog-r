@@ -43,7 +43,7 @@ import static org.junit.Assert.assertTrue;
 public class TestRFunction {
 	private static Server SERVER = null;
 
-	private static final String DB = "testTitleCase";
+	private static final String DB = "testRAggregates";
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
@@ -83,17 +83,14 @@ public class TestRFunction {
 		try {
 
 			final String aQuery = "prefix stardog: <" + Namespaces.STARDOG + ">" +
-			                      "select ?str where { bind(stardog:titleCase(\"this sentence does not use title case.\") as ?str) }";
+			                      "select (agg:stardog:gmean(?s) as ?res) where { ?s ?p ?o  }";
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
 			try {
 				assertTrue("Should have a result", aResult.hasNext());
 
-				final String aValue = aResult.next().getValue("str").stringValue();
-
-				assertEquals("This Sentence Does Not Use Title Case.", aValue);
-
-				assertFalse("Should have no more results", aResult.hasNext());
+				final String aValue = aResult.next().getValue("res").stringValue();
+				assertEquals("0D", aValue);
 			}
 			finally {
 				aResult.close();
@@ -103,11 +100,4 @@ public class TestRFunction {
 			aConn.close();
 		}
 	}
-	
-	@Test
-	public void foobarTest() throws Exception {
-		
-	}
-
-	
 }

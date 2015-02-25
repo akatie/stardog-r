@@ -42,7 +42,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestTitleCaseFunction {
 	private static Server SERVER = null;
-
 	private static final String DB = "testTitleCase";
 
 	@BeforeClass
