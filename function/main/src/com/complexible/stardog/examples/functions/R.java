@@ -15,15 +15,11 @@
 
 package com.complexible.stardog.examples.functions;
 
-import com.complexible.common.base.Strings2;
 import com.complexible.common.rdf.model.Namespaces;
-import com.complexible.common.rdf.model.StardogValueFactory;
 import com.complexible.common.rdf.query.resultio.TextTableQueryResultWriter;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
 import com.complexible.stardog.api.SelectQuery;
-import com.complexible.stardog.api.admin.AdminConnection;
-import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
 import com.complexible.stardog.plan.filter.ExpressionVisitor;
 import com.complexible.stardog.plan.filter.functions.AbstractFunction;
 import com.complexible.stardog.plan.filter.functions.Function;
@@ -41,10 +37,6 @@ import static com.complexible.common.rdf.model.Values.literal;
 
 import org.rosuda.JRI.Rengine;
 import org.rosuda.JRI.REXP;
-import org.rosuda.JRI.RList;
-import org.rosuda.JRI.RVector;
-import org.rosuda.JRI.RMainLoopCallbacks;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;

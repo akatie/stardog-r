@@ -15,6 +15,8 @@
 
 package com.complexible.stardog.plan.aggregates;
 
+import java.io.File;
+
 import com.complexible.common.protocols.server.Server;
 import com.complexible.common.rdf.model.Namespaces;
 import com.complexible.stardog.Stardog;
@@ -54,13 +56,11 @@ public class TestRFunction {
 		final AdminConnection aConn = AdminConnectionConfiguration.toEmbeddedServer()
 		                                                          .credentials("admin", "admin")
 		                                                          .connect();
-
 		try {
 			if (aConn.list().contains(DB)) {
 				aConn.drop(DB);
 			}
-
-			aConn.createMemory(DB);
+			aConn.memory(DB).create(new File("/home/amp/src/linked-edit-rules/data/people.ttl"));			
 		}
 		finally {
 			aConn.close();
@@ -75,22 +75,33 @@ public class TestRFunction {
 	}
 
 	@Test
-	public void TestR() throws Exception {
+	public void TestMean() throws Exception {
 		final Connection aConn = ConnectionConfiguration.to(DB)
 		                                                .credentials("admin", "admin")
 		                                                .connect();
 
 		try {
 
-			final String aQuery = "prefix stardog: <" + Namespaces.STARDOG + ">" +
-			                      "select (agg:stardog:gmean(?s) as ?res) where { ?s ?p ?o  }";
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +
+									"PREFIX agg: <urn:aggregate> " +
+									"SELECT (agg:stardog:mean(?o) AS ?c) " +
+//									"SELECT * " +	
+									"WHERE { ?s leri:height ?o } ";
+			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
 			try {
-				assertTrue("Should have a result", aResult.hasNext());
+//				assertTrue("Should have a result", aResult.hasNext());
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+				
 
-				final String aValue = aResult.next().getValue("res").stringValue();
-				assertEquals("0D", aValue);
+//				final String aValue = aResult.next().getValue("s").stringValue();		
+//				
+//				assertEquals("0D", aValue);
 			}
 			finally {
 				aResult.close();
@@ -100,4 +111,43 @@ public class TestRFunction {
 			aConn.close();
 		}
 	}
+	
+	@Test
+	public void TestMedian() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +
+									"PREFIX agg: <urn:aggregate> " +
+									"SELECT (agg:stardog:median(?o) AS ?c) " +
+//									"SELECT * " +	
+									"WHERE { ?s leri:height ?o } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			try {
+//				assertTrue("Should have a result", aResult.hasNext());
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+				
+
+//				final String aValue = aResult.next().getValue("s").stringValue();		
+//				
+//				assertEquals("0D", aValue);
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+
 }
