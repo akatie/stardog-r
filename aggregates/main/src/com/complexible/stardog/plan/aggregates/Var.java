@@ -29,7 +29,7 @@ public final class Var extends AbstractAggregate {
 	private List<Double> rCurr = null; 
 	
 	public Var() {		
-		super(Namespaces.STARDOG + "mean");
+		super(Namespaces.STARDOG + "var");
 	}
 
 	protected Var(final Var theAgg) {

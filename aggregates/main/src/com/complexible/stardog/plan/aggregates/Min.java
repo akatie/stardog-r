@@ -29,7 +29,7 @@ public final class Min extends AbstractAggregate {
 	private List<Double> rCurr = null; 
 	
 	public Min() {		
-		super(Namespaces.STARDOG + "mean");
+		super(Namespaces.STARDOG + "min");
 	}
 
 	protected Min(final Min theAgg) {

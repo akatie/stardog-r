@@ -29,7 +29,7 @@ public final class Sd extends AbstractAggregate {
 	private List<Double> rCurr = null; 
 	
 	public Sd() {		
-		super(Namespaces.STARDOG + "mean");
+		super(Namespaces.STARDOG + "sd");
 	}
 
 	protected Sd(final Sd theAgg) {

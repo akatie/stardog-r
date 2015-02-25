@@ -29,7 +29,7 @@ public final class Max extends AbstractAggregate {
 	private List<Double> rCurr = null; 
 	
 	public Max() {		
-		super(Namespaces.STARDOG + "mean");
+		super(Namespaces.STARDOG + "max");
 	}
 
 	protected Max(final Max theAgg) {
