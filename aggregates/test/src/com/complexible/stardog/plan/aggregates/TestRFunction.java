@@ -79,29 +79,22 @@ public class TestRFunction {
 		final Connection aConn = ConnectionConfiguration.to(DB)
 		                                                .credentials("admin", "admin")
 		                                                .connect();
-
 		try {
 
 			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
 									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +
 									"PREFIX agg: <urn:aggregate> " +
-									"SELECT (agg:stardog:mean(?o) AS ?c) " +
-//									"SELECT * " +	
+									"SELECT (agg:stardog:mean(?o) AS ?c) " +	
 									"WHERE { ?s leri:height ?o } ";
 			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
 			try {
-//				assertTrue("Should have a result", aResult.hasNext());
 				System.out.println("Query result:");
 				while (aResult.hasNext()) {
 					System.out.println(aResult.next().getValue("c").stringValue());
 				}
-				
-
-//				final String aValue = aResult.next().getValue("s").stringValue();		
-//				
-//				assertEquals("0D", aValue);
 			}
 			finally {
 				aResult.close();
@@ -117,29 +110,22 @@ public class TestRFunction {
 		final Connection aConn = ConnectionConfiguration.to(DB)
 		                                                .credentials("admin", "admin")
 		                                                .connect();
-
 		try {
 
 			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
 									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +
 									"PREFIX agg: <urn:aggregate> " +
 									"SELECT (agg:stardog:median(?o) AS ?c) " +
-//									"SELECT * " +	
 									"WHERE { ?s leri:height ?o } ";
 			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
 			try {
-//				assertTrue("Should have a result", aResult.hasNext());
 				System.out.println("Query result:");
 				while (aResult.hasNext()) {
 					System.out.println(aResult.next().getValue("c").stringValue());
 				}
-				
-
-//				final String aValue = aResult.next().getValue("s").stringValue();		
-//				
-//				assertEquals("0D", aValue);
 			}
 			finally {
 				aResult.close();
