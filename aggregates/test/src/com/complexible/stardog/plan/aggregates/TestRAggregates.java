@@ -42,7 +42,7 @@ import static org.junit.Assert.assertTrue;
  * @since   1.0
  * @version 1.0
  */
-public class TestRAggregate {
+public class TestRAggregates {
 	private static Server SERVER = null;
 
 	private static final String DB = "testRAggregates";
@@ -241,6 +241,36 @@ public class TestRAggregate {
 									"PREFIX agg: <urn:aggregate> " +
 									"SELECT (agg:stardog:var(?o) AS ?c) " +
 									"WHERE { ?s leri:height ?o } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestAbs() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:abs(?o) AS ?c) } ";
 			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
