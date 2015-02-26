@@ -4,3 +4,4 @@ com.complexible.stardog.plan.aggregates.Sd
 com.complexible.stardog.plan.aggregates.Var
 com.complexible.stardog.plan.aggregates.MaxAggregate
 com.complexible.stardog.plan.aggregates.MinAggregate
+com.complexible.stardog.plan.filter.functions.Abs
