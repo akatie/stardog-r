@@ -81,7 +81,7 @@
 		<junit fork="yes" printsummary="yes" haltonfailure="yes" failureproperty="junit.failure" showoutput="true">
 			<jvmarg value="-Dstardog.home=${stardog.home}"/>
 
-			<test name="com.complexible.stardog.plan.aggregates.TestRFunction"/>
+			<test name="com.complexible.stardog.plan.aggregates.TestRAggregate"/>
 
 			<formatter type="brief" usefile="false"/>
 

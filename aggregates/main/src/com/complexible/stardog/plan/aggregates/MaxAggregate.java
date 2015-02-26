@@ -24,15 +24,15 @@ import static com.complexible.common.rdf.model.Values.literal;
  * @since   3.0
  * @version 3.0
  */
-public final class Max extends AbstractAggregate {	
+public final class MaxAggregate extends AbstractAggregate {	
 	private Rengine re = null;
 	private List<Double> rCurr = null; 
 	
-	public Max() {		
+	public MaxAggregate() {		
 		super(Namespaces.STARDOG + "max");
 	}
 
-	protected Max(final Max theAgg) {
+	protected MaxAggregate(final MaxAggregate theAgg) {
 		super(theAgg);
 	}
 
@@ -99,7 +99,7 @@ public final class Max extends AbstractAggregate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Max copy() {
-		return new Max(this);
+	public MaxAggregate copy() {
+		return new MaxAggregate(this);
 	}
 }

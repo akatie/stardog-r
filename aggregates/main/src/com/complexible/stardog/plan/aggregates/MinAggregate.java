@@ -24,15 +24,15 @@ import static com.complexible.common.rdf.model.Values.literal;
  * @since   3.0
  * @version 3.0
  */
-public final class Min extends AbstractAggregate {	
+public final class MinAggregate extends AbstractAggregate {	
 	private Rengine re = null;
 	private List<Double> rCurr = null; 
 	
-	public Min() {		
+	public MinAggregate() {		
 		super(Namespaces.STARDOG + "min");
 	}
 
-	protected Min(final Min theAgg) {
+	protected MinAggregate(final MinAggregate theAgg) {
 		super(theAgg);
 	}
 
@@ -99,7 +99,7 @@ public final class Min extends AbstractAggregate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Min copy() {
-		return new Min(this);
+	public MinAggregate copy() {
+		return new MinAggregate(this);
 	}
 }

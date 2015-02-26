@@ -42,7 +42,7 @@ import static org.junit.Assert.assertTrue;
  * @since   1.0
  * @version 1.0
  */
-public class TestRFunction {
+public class TestRAggregate {
 	private static Server SERVER = null;
 
 	private static final String DB = "testRAggregates";
@@ -137,7 +137,7 @@ public class TestRFunction {
 	}
 	
 	@Test
-	public void TestMax() throws Exception {
+	public void TestMaxAggregate() throws Exception {
 		final Connection aConn = ConnectionConfiguration.to(DB)
 		                                                .credentials("admin", "admin")
 		                                                .connect();
@@ -168,7 +168,7 @@ public class TestRFunction {
 	}
 	
 	@Test
-	public void TestMin() throws Exception {
+	public void TestMinAggregate() throws Exception {
 		final Connection aConn = ConnectionConfiguration.to(DB)
 		                                                .credentials("admin", "admin")
 		                                                .connect();

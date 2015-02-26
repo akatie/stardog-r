@@ -1,6 +1,6 @@
 com.complexible.stardog.plan.aggregates.Mean
 com.complexible.stardog.plan.aggregates.Median
-com.complexible.stardog.plan.aggregates.Max
-com.complexible.stardog.plan.aggregates.Min
 com.complexible.stardog.plan.aggregates.Sd
 com.complexible.stardog.plan.aggregates.Var
+com.complexible.stardog.plan.aggregates.MaxAggregate
+com.complexible.stardog.plan.aggregates.MinAggregate
