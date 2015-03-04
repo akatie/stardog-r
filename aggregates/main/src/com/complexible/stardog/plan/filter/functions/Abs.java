@@ -23,6 +23,7 @@ import com.complexible.stardog.plan.filter.functions.numeric.MathFunction;
 import com.complexible.stardog.plan.filter.functions.UserDefinedFunction;
 
 import org.openrdf.model.Value;
+
 import static com.complexible.common.rdf.model.Values.literal;
 
 import org.rosuda.JRI.Rengine;
@@ -36,10 +37,14 @@ import org.rosuda.JRI.REXP;
  * @version 3.0
  *
  */
-public final class Abs extends AbstractFunction implements UserDefinedFunction {
+public final class Abs extends AbstractFunction implements MathFunction {
 
     protected Abs() {
     	super(1, Namespaces.STARDOG + "abs");
+    }
+    
+    private Abs(final Abs theExpr) {
+    	super(theExpr);
     }
 
     @Override
@@ -59,12 +64,18 @@ public final class Abs extends AbstractFunction implements UserDefinedFunction {
 	@Override
 	public Function copy() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Abs(this);
 	}
 
 	@Override
-	public void accept(ExpressionVisitor arg0) {
-		// TODO Auto-generated method stub
+	public void accept(ExpressionVisitor theVisitor) {
+		theVisitor.visit(this);
 		
+	}
+
+	@Override
+	public String getOpString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
