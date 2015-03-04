@@ -60,7 +60,7 @@ public class TestRAggregates {
 			if (aConn.list().contains(DB)) {
 				aConn.drop(DB);
 			}
-			aConn.memory(DB).create(new File("/home/amp/src/linked-edit-rules/data/people.ttl"));			
+			aConn.memory(DB).create(new File("/Users/Albert/src/linked-edit-rules/data/people.ttl"));			
 		}
 		finally {
 			aConn.close();
@@ -261,6 +261,36 @@ public class TestRAggregates {
 	}
 	
 	@Test
+	public void TestTitleCase() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s rdfs:label ?o . BIND (stardog:TitleCase(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
 	public void TestAbs() throws Exception {
 		final Connection aConn = ConnectionConfiguration.to(DB)
 		                                                .credentials("admin", "admin")
@@ -271,6 +301,36 @@ public class TestRAggregates {
 									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
 									"SELECT ?c " +
 									"WHERE { ?s leri:height ?o . BIND (stardog:abs(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestSqrt() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:sqrt(?o) AS ?c) } ";
 			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
