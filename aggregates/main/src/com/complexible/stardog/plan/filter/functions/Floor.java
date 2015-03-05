@@ -36,13 +36,13 @@ import org.rosuda.JRI.REXP;
  * @version 3.0
  *
  */
-public final class Sqrt extends AbstractFunction implements MathFunction {
+public final class Floor extends AbstractFunction implements MathFunction {
 
-    protected Sqrt() {
-    	super(1, Namespaces.STARDOG + "sqrt");
+    protected Floor() {
+    	super(1, Namespaces.STARDOG + "floor");
     }
     
-    private Sqrt(final Sqrt theExpr) {
+    private Floor(final Floor theExpr) {
     	super(theExpr);
     }
 
@@ -54,7 +54,7 @@ public final class Sqrt extends AbstractFunction implements MathFunction {
 		
 		double [] x = {Double.parseDouble(theArgs[0].stringValue())};
 		re.assign("x", x);
-		REXP result = re.eval("sqrt(x)");
+		REXP result = re.eval("floor(x)");
 		re.end();
 	
 		return literal(result.asDouble());
@@ -63,7 +63,7 @@ public final class Sqrt extends AbstractFunction implements MathFunction {
 	@Override
 	public Function copy() {
 		// TODO Auto-generated method stub
-		return new Sqrt(this);
+		return new Floor(this);
 	}
 
 	@Override

@@ -261,36 +261,6 @@ public class TestRAggregates {
 	}
 	
 	@Test
-	public void TestTitleCase() throws Exception {
-		final Connection aConn = ConnectionConfiguration.to(DB)
-		                                                .credentials("admin", "admin")
-		                                                .connect();
-		try {
-
-			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
-									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
-									"SELECT ?c " +
-									"WHERE { ?s rdfs:label ?o . BIND (stardog:TitleCase(?o) AS ?c) } ";
-			System.out.println("Executing query: " + aQuery);
-
-			final TupleQueryResult aResult = aConn.select(aQuery).execute();
-			
-			try {
-				System.out.println("Query result:");
-				while (aResult.hasNext()) {
-					System.out.println(aResult.next().getValue("c").stringValue());
-				}
-			}
-			finally {
-				aResult.close();
-			}
-		}
-		finally {
-			aConn.close();
-		}
-	}
-	
-	@Test
 	public void TestAbs() throws Exception {
 		final Connection aConn = ConnectionConfiguration.to(DB)
 		                                                .credentials("admin", "admin")
@@ -331,6 +301,336 @@ public class TestRAggregates {
 									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
 									"SELECT ?c " +
 									"WHERE { ?s leri:height ?o . BIND (stardog:sqrt(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestCeiling() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:ceiling(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestFloor() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:floor(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestTrunc() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:trunc(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+
+	@Test
+	public void TestLog() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:log(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestLog10() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:log10(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestExp() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:exp(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestRound() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:round(?o, 2) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestSignif() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:signif(?o, 2) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestCos() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:cos(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestSin() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:sin(?o) AS ?c) } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
+	
+	@Test
+	public void TestTan() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT ?c " +
+									"WHERE { ?s leri:height ?o . BIND (stardog:tan(?o) AS ?c) } ";
 			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();

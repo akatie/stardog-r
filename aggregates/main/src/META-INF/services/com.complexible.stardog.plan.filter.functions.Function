@@ -4,6 +4,16 @@ com.complexible.stardog.plan.aggregates.MaxAggregate
 com.complexible.stardog.plan.aggregates.MinAggregate
 com.complexible.stardog.plan.aggregates.Sd
 com.complexible.stardog.plan.aggregates.Var
-com.complexible.stardog.examples.functions.TitleCase
 com.complexible.stardog.plan.filter.functions.Abs
 com.complexible.stardog.plan.filter.functions.Sqrt
+com.complexible.stardog.plan.filter.functions.Ceiling
+com.complexible.stardog.plan.filter.functions.Floor
+com.complexible.stardog.plan.filter.functions.Trunc
+com.complexible.stardog.plan.filter.functions.Round
+com.complexible.stardog.plan.filter.functions.Signif
+com.complexible.stardog.plan.filter.functions.Log
+com.complexible.stardog.plan.filter.functions.Log10
+com.complexible.stardog.plan.filter.functions.Exp
+com.complexible.stardog.plan.filter.functions.Cos
+com.complexible.stardog.plan.filter.functions.Sin
+com.complexible.stardog.plan.filter.functions.Tan
