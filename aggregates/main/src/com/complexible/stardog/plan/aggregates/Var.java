@@ -18,15 +18,13 @@ import org.rosuda.JRI.Rengine;
 import static com.complexible.common.rdf.model.Values.literal;
 
 /**
- * <p></p>
+ * <p>Variance custom aggregate through the R interface</p>
  *
- * @author  Michael Grove, Albert Meroño-Peñuela
+ * @author  Albert Meroño-Peñuela
  * @since   3.0
  * @version 3.0
  */
-public final class Var extends AbstractAggregate {	
-	private Rengine re = null;
-	private List<Double> rCurr = null; 
+public final class Var extends RAggregate {	
 	
 	public Var() {		
 		super(Namespaces.STARDOG + "var");
@@ -48,50 +46,21 @@ public final class Var extends AbstractAggregate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setArgs(final List<Expression> theArgs) {
-		super.setArgs(theArgs);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	protected Value _getValue() throws ExpressionEvaluationException {
 		if (rCurr == null) {
 			return literal("0D");
 		}
 		else {
 			re = Rengine.getMainEngine();
-			if(re == null)
-			    re = new Rengine(new String[] {"--vanilla"}, false, null);
 			double[] y = new double[rCurr.size()];
 			for (int i = 0; i < rCurr.size(); i++) {
 				y[i] = rCurr.get(i);
 			}
 			re.assign("y", y);
 			rCurr = null;
-			return literal(re.eval("var(y)").asDouble());
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void aggregate(final Value theValue, final long theMultiplicity) throws ExpressionEvaluationException {
-		if (!(theValue instanceof Literal)) {
-            throw new ExpressionEvaluationException("Invalid argument to " + getName() + " argument MUST be a literal value, was: " + theValue);
-		}
-		if (rCurr == null) {
-			rCurr = new ArrayList<Double>();
-			rCurr.add(Double.parseDouble(theValue.stringValue()));
-		} else {
-			// Start JRI R session
-			re = Rengine.getMainEngine();
-			if(re == null)
-			    re = new Rengine(new String[] {"--vanilla"}, false, null);
-			rCurr.add(Double.parseDouble(theValue.stringValue()));			
+			Literal result = literal(re.eval("var(y)").asDouble());
 			re.end();
+			return result;
 		}
 	}
 
