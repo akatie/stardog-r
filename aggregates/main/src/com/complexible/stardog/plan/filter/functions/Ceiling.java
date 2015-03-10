@@ -29,7 +29,7 @@ import org.rosuda.JRI.Rengine;
 import org.rosuda.JRI.REXP;
 
 /**
- * <p>Absolute value function through R interface</p>
+ * <p>Ceiling function through R interface</p>
  *
  * @author  Albert Meroño-Peñuela
  * @since   3.0
@@ -62,7 +62,6 @@ public final class Ceiling extends AbstractFunction implements MathFunction {
 
 	@Override
 	public Function copy() {
-		// TODO Auto-generated method stub
 		return new Ceiling(this);
 	}
 
@@ -74,7 +73,6 @@ public final class Ceiling extends AbstractFunction implements MathFunction {
 
 	@Override
 	public String getOpString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Ceiling";
 	}
 }

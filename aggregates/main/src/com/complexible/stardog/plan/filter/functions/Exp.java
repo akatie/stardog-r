@@ -29,7 +29,7 @@ import org.rosuda.JRI.Rengine;
 import org.rosuda.JRI.REXP;
 
 /**
- * <p>Absolute value function through R interface</p>
+ * <p>Exp function through R interface</p>
  *
  * @author  Albert Meroño-Peñuela
  * @since   3.0
@@ -62,7 +62,6 @@ public final class Exp extends AbstractFunction implements MathFunction {
 
 	@Override
 	public Function copy() {
-		// TODO Auto-generated method stub
 		return new Exp(this);
 	}
 
@@ -73,7 +72,6 @@ public final class Exp extends AbstractFunction implements MathFunction {
 
 	@Override
 	public String getOpString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Exp";
 	}
 }

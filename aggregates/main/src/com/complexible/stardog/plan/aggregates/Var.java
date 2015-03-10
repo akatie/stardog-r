@@ -4,11 +4,7 @@
 
 package com.complexible.stardog.plan.aggregates;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.complexible.common.rdf.model.Namespaces;
-import com.complexible.stardog.plan.filter.Expression;
 import com.complexible.stardog.plan.filter.ExpressionEvaluationException;
 
 import org.openrdf.model.Literal;

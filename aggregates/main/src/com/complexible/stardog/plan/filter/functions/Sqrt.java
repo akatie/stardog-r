@@ -29,7 +29,7 @@ import org.rosuda.JRI.Rengine;
 import org.rosuda.JRI.REXP;
 
 /**
- * <p>Absolute value function through R interface</p>
+ * <p>Square root function through R interface</p>
  *
  * @author  Albert Meroño-Peñuela
  * @since   3.0
@@ -62,19 +62,16 @@ public final class Sqrt extends AbstractFunction implements MathFunction {
 
 	@Override
 	public Function copy() {
-		// TODO Auto-generated method stub
 		return new Sqrt(this);
 	}
 
 	@Override
 	public void accept(ExpressionVisitor theVisitor) {
-		theVisitor.visit(this);
-		
+		theVisitor.visit(this);	
 	}
 
 	@Override
 	public String getOpString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Sqrt";
 	}
 }

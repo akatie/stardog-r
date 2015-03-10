@@ -20,8 +20,6 @@ import com.complexible.stardog.plan.filter.ExpressionVisitor;
 import com.complexible.stardog.plan.filter.functions.AbstractFunction;
 import com.complexible.stardog.plan.filter.functions.Function;
 import com.complexible.stardog.plan.filter.functions.numeric.MathFunction;
-import com.complexible.stardog.plan.filter.functions.UserDefinedFunction;
-
 import org.openrdf.model.Value;
 
 import static com.complexible.common.rdf.model.Values.literal;
@@ -63,19 +61,16 @@ public final class Abs extends AbstractFunction implements MathFunction {
 
 	@Override
 	public Function copy() {
-		// TODO Auto-generated method stub
 		return new Abs(this);
 	}
 
 	@Override
 	public void accept(ExpressionVisitor theVisitor) {
-		theVisitor.visit(this);
-		
+		theVisitor.visit(this);		
 	}
 
 	@Override
 	public String getOpString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Abs";
 	}
 }
