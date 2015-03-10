@@ -26,7 +26,6 @@ import com.complexible.stardog.protocols.snarl.SNARLProtocolConstants;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResult;
 
 import static org.junit.Assert.assertEquals;

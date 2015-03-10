@@ -18,7 +18,6 @@ package com.complexible.stardog.plan.aggregates;
 import java.io.File;
 
 import com.complexible.common.protocols.server.Server;
-import com.complexible.common.rdf.model.Namespaces;
 import com.complexible.stardog.Stardog;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
@@ -28,17 +27,12 @@ import com.complexible.stardog.protocols.snarl.SNARLProtocolConstants;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResult;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * <p></p>
  *
- * @author  Michael Grove
+ * @author  Albert Meroño-Peñuela
  * @since   1.0
  * @version 1.0
  */

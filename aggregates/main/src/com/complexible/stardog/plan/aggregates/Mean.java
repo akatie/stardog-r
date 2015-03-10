@@ -48,6 +48,9 @@ public final class Mean extends RAggregate {
 		}
 		else {
 			re = Rengine.getMainEngine();
+			if (re == null) {
+				re = new Rengine(new String[] {"--vanilla"}, false, null);
+			}
 			double[] y = new double[rCurr.size()];
 			for (int i = 0; i < rCurr.size(); i++) {
 				y[i] = rCurr.get(i);
