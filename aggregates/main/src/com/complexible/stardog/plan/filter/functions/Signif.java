@@ -54,7 +54,7 @@ public final class Signif extends AbstractFunction implements MathFunction {
 		
 		double [] x = {Double.parseDouble(theArgs[0].stringValue())};
 		re.assign("x", x);
-		REXP result = re.eval("signif(x, digits=" + theArgs[1] + ")");
+		REXP result = re.eval("signif(x, digits=" + theArgs[1].stringValue() + ")");
 		re.end();
 	
 		return literal(result.asDouble());

@@ -49,12 +49,12 @@ public final class Round extends AbstractFunction implements MathFunction {
     @Override
     protected Value internalEvaluate(final Value... theArgs) {
 		Rengine re = Rengine.getMainEngine();
-		if(re == null)
+		if(re == null) {
 		    re = new Rengine(new String[] {"--vanilla"}, false, null);
-		
+		}
 		double [] x = {Double.parseDouble(theArgs[0].stringValue())};
 		re.assign("x", x);
-		REXP result = re.eval("round(x, digits=" + theArgs[1] + ")");
+		REXP result = re.eval("round(x, digits=" + theArgs[1].stringValue() + ")");
 		re.end();
 	
 		return literal(result.asDouble());

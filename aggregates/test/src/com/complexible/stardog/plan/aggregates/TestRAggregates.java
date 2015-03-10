@@ -504,7 +504,7 @@ public class TestRAggregates {
 			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
 									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
 									"SELECT ?c " +
-									"WHERE { ?s leri:height ?o . BIND (stardog:round(?o, 2) AS ?c) } ";
+									"WHERE { ?s leri:height ?o . BIND (stardog:round(stardog:sin(?o), 4) AS ?c) } ";
 			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
@@ -534,7 +534,7 @@ public class TestRAggregates {
 			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
 									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
 									"SELECT ?c " +
-									"WHERE { ?s leri:height ?o . BIND (stardog:signif(?o, 2) AS ?c) } ";
+									"WHERE { ?s leri:height ?o . BIND (stardog:signif(stardog:sin(?o), 4) AS ?c) } ";
 			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
