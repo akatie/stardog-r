@@ -14,19 +14,19 @@ import org.rosuda.JRI.Rengine;
 import static com.complexible.common.rdf.model.Values.literal;
 
 /**
- * <p>Maximum of a set custom aggregate through the R interface</p>
+ * <p>Minimum of a set custom aggregate through the R interface</p>
  *
  * @author  Albert Meroño-Peñuela
  * @since   3.0
  * @version 3.0
  */
-public final class MaxAggregate extends RAggregate {	
-	
-	public MaxAggregate() {		
-		super(Namespaces.STARDOG + "max");
+public final class MinRCustom extends RAggregate {	
+
+	public MinRCustom() {		
+		super(Namespaces.STARDOG + "min");
 	}
 
-	protected MaxAggregate(final MaxAggregate theAgg) {
+	protected MinRCustom(final MinRCustom theAgg) {
 		super(theAgg);
 	}
 
@@ -54,7 +54,7 @@ public final class MaxAggregate extends RAggregate {
 			}
 			re.assign("y", y);
 			rCurr = null;
-			Literal result = literal(re.eval("max(y)").asDouble());
+			Literal result = literal(re.eval("min(y)").asDouble());
 			re.end();
 			return result;
 		}
@@ -64,7 +64,7 @@ public final class MaxAggregate extends RAggregate {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public MaxAggregate copy() {
-		return new MaxAggregate(this);
+	public MinRCustom copy() {
+		return new MinRCustom(this);
 	}
 }
