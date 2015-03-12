@@ -38,7 +38,10 @@ public abstract class RAggregate extends AbstractAggregate {
 	 */
 	@Override
 	public void initialize() {
-		re = new Rengine(new String[] {"--vanilla"}, false, null);
+		re = Rengine.getMainEngine();
+		if (re == null) {
+			re = new Rengine(new String[] {"--vanilla"}, false, null);
+		}
 	}
 
 	/**
@@ -46,6 +49,8 @@ public abstract class RAggregate extends AbstractAggregate {
 	 */
 	@Override
 	protected void aggregate(final Value theValue, final long theMultiplicity) throws ExpressionEvaluationException {
+		System.out.println("theValue: " + theValue.stringValue());
+		System.out.println("theMultiplicity: " + theMultiplicity);
 		if (!(theValue instanceof Literal)) {
             throw new ExpressionEvaluationException("Invalid argument to " + getName() + " argument MUST be a literal value, was: " + theValue);
 		}
