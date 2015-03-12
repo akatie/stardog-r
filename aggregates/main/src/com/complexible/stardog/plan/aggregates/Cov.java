@@ -5,6 +5,7 @@
 package com.complexible.stardog.plan.aggregates;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.complexible.common.rdf.model.Namespaces;
@@ -31,10 +32,11 @@ import static com.complexible.common.rdf.model.Values.literal;
  */
 public final class Cov extends AbstractExpression implements Aggregate {	
 	protected Rengine re = null;
-	protected List<Double> rCurr = null; 
+	protected List<Double> rCurr0 = null;
+	protected List<Double> rCurr1 = null;
 	
 	public Cov() {
-		super(Namespaces.STARDOG + "cov");
+		super();
 	}
 
 	protected Cov(final Cov theAgg) {
@@ -47,53 +49,8 @@ public final class Cov extends AbstractExpression implements Aggregate {
 	@Override
 	public void setArgs(final List<Expression> theArgs) {
 		Preconditions.checkArgument(theArgs.size() == 2, "Covariance aggregate function takes two arguments, %d found", theArgs.size());
-		System.out.println("I'M SETTING THE ARGS");
-		for (Expression e : theArgs) {
-			System.out.println(e.toString());
-		}
 		super.setArgs(theArgs);
 	}
-
-//	/**
-//	 * {@inheritDoc}
-//	 */
-//	@Override
-//	protected Value _getValue() throws ExpressionEvaluationException {
-//		if (rCurr == null) {
-//			return literal("0D");
-//		}
-//		else {
-//			re = Rengine.getMainEngine();
-//			if (re == null) {
-//				re = new Rengine(new String[] {"--vanilla"}, false, null);
-//			}
-//			double[] y = new double[rCurr.size()];
-//			for (int i = 0; i < rCurr.size(); i++) {
-//				y[i] = rCurr.get(i);
-//			}
-//			re.assign("y", y);
-//			rCurr = null;
-//			Literal result = literal(re.eval("mean(y)").asDouble());
-//			re.end();
-//			return result;
-//		}
-//	}
-	
-//	/**
-//	 * {@inheritDoc}
-//	 */
-//	@Override
-//	protected void aggregate(final Value theValue, final long theMultiplicity) throws ExpressionEvaluationException {
-//		System.out.println("theValue: " + theValue.stringValue());
-//		System.out.println("theMultiplicity: " + theMultiplicity);
-//		if (!(theValue instanceof Literal)) {
-//            throw new ExpressionEvaluationException("Invalid argument to " + getName() + " argument MUST be a literal value, was: " + theValue);
-//		}
-//		if (rCurr == null) {
-//			rCurr = new ArrayList<Double>();
-//		}
-//		rCurr.add(Double.parseDouble(theValue.stringValue()));
-//	}
 
 	/**
 	 * {@inheritDoc}
@@ -105,14 +62,12 @@ public final class Cov extends AbstractExpression implements Aggregate {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return Namespaces.STARDOG + "cov";
 	}
 
 	@Override
 	public List<String> getNames() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<String>(Arrays.asList(getName()));
 	}
 
 	@Override
@@ -121,15 +76,55 @@ public final class Cov extends AbstractExpression implements Aggregate {
 	}
 
 	@Override
-	public Value evaluate(ValueSolution theSolution) throws ExpressionEvaluationException {
-		System.out.println("Processing now: " + theSolution.toString());
-		return theSolution.get(0);
+	public Value evaluate(ValueSolution theSolution) throws ExpressionEvaluationException {		
+//		if (!(theValue instanceof Literal)) {
+//            throw new ExpressionEvaluationException("Invalid argument to " + getName() + " argument MUST be a literal value, was: " + theValue);
+//		}
+		if (rCurr0 == null) {
+			rCurr0 = new ArrayList<Double>();
+		}
+		if (rCurr1 == null) {
+			rCurr1 = new ArrayList<Double>();
+		}		
+		rCurr0.add(Double.parseDouble(theSolution.get(0).stringValue()));
+		for (Double r0 : rCurr0) {
+			System.out.println(r0);
+		}
+		rCurr1.add(Double.parseDouble(theSolution.get(1).stringValue()));
+		for (Double r1 : rCurr1) {
+			System.out.println(r1);
+		}
+		
+		return literal("0D");
 	}
 
 	@Override
 	public Value get() throws ExpressionEvaluationException {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("ENTERING GET");
+		if (rCurr0 == null || rCurr1 == null) {
+			return literal("0D");
+		}
+		else {
+			re = Rengine.getMainEngine();
+			if (re == null) {
+				re = new Rengine(new String[] {"--vanilla"}, false, null);
+			}
+			double[] y = new double[rCurr0.size()];
+			for (int i = 0; i < rCurr0.size(); i++) {
+				y[i] = rCurr0.get(i);
+			}
+			double[] z = new double[rCurr1.size()];
+			for (int i = 0; i < rCurr1.size(); i++) {
+				z[i] = rCurr1.get(i);
+			}
+			re.assign("y", y);
+			re.assign("z", z);
+			rCurr0 = null;
+			rCurr1 = null;
+			Literal result = literal(re.eval("cov(y,z)").asDouble());
+			re.end();
+			return result;
+		}
 	}
 
 	@Override

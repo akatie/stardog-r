@@ -54,7 +54,7 @@ public class TestRAggregates {
 			if (aConn.list().contains(DB)) {
 				aConn.drop(DB);
 			}
-			aConn.memory(DB).create(new File("/Users/Albert/src/linked-edit-rules/data/people.ttl"));			
+			aConn.memory(DB).create(new File("/home/amp/src/linked-edit-rules/data/people.ttl"));			
 		}
 		finally {
 			aConn.close();
@@ -644,34 +644,35 @@ public class TestRAggregates {
 //		}
 //	}
 	
-//	@Test
-//	public void TestCov() throws Exception {
-//		final Connection aConn = ConnectionConfiguration.to(DB)
-//		                                                .credentials("admin", "admin")
-//		                                                .connect();
-//		try {
-//
-//			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
-//									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
-//									"SELECT (stardog:cov(?o, ?o) AS ?c) " +
-//									"WHERE { ?s leri:height ?o . } ";
-//			System.out.println("Executing query: " + aQuery);
-//
-//			final TupleQueryResult aResult = aConn.select(aQuery).execute();
-//			
-////			try {
-////				System.out.println("Query result:");
-////				while (aResult.hasNext()) {
-////					System.out.println(aResult.next().getValue("c").stringValue());
-////				}
-////			}
-////			finally {
-////				aResult.close();
-////			}
-//		}
-//		finally {
-//			aConn.close();
-//		}
-//	}
+	@Test
+	public void TestCov() throws Exception {
+		final Connection aConn = ConnectionConfiguration.to(DB)
+		                                                .credentials("admin", "admin")
+		                                                .connect();
+		try {
+
+			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+									"PREFIX sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#> " +
+									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+									"SELECT (stardog:cov(?height, ?age) AS ?c) " +
+									"WHERE { ?s leri:height ?height ; sdmx-dimension:age ?age } ";
+			System.out.println("Executing query: " + aQuery);
+
+			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+			
+			try {
+				System.out.println("Query result:");
+				while (aResult.hasNext()) {
+					System.out.println(aResult.next().getValue("c").stringValue());
+				}
+			}
+			finally {
+				aResult.close();
+			}
+		}
+		finally {
+			aConn.close();
+		}
+	}
 
 }
