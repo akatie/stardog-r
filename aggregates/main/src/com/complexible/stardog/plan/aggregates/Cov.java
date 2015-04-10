@@ -76,7 +76,8 @@ public final class Cov extends AbstractExpression implements Aggregate {
 	}
 
 	@Override
-	public Value evaluate(ValueSolution theSolution) throws ExpressionEvaluationException {		
+	public Value evaluate(ValueSolution theSolution) throws ExpressionEvaluationException {
+		System.out.println("Entering EVALUATE");
 //		if (!(theValue instanceof Literal)) {
 //            throw new ExpressionEvaluationException("Invalid argument to " + getName() + " argument MUST be a literal value, was: " + theValue);
 //		}
@@ -88,19 +89,19 @@ public final class Cov extends AbstractExpression implements Aggregate {
 		}		
 		rCurr0.add(Double.parseDouble(theSolution.get(0).stringValue()));
 		for (Double r0 : rCurr0) {
-			System.out.println(r0);
+			// System.out.println(r0);
 		}
 		rCurr1.add(Double.parseDouble(theSolution.get(1).stringValue()));
 		for (Double r1 : rCurr1) {
-			System.out.println(r1);
+			// System.out.println(r1);
 		}
 		
-		return literal("0D");
+		return literal("0");
 	}
 
 	@Override
 	public Value get() throws ExpressionEvaluationException {
-		System.out.println("ENTERING GET");
+		System.out.println("Entering GET");
 		if (rCurr0 == null || rCurr1 == null) {
 			return literal("0D");
 		}

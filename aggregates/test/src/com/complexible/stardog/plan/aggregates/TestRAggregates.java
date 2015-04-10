@@ -54,7 +54,7 @@ public class TestRAggregates {
 			if (aConn.list().contains(DB)) {
 				aConn.drop(DB);
 			}
-			aConn.memory(DB).create(new File("/home/amp/src/linked-edit-rules/data/people.ttl"));			
+			aConn.memory(DB).create(new File("/Users/Albert/src/linked-edit-rules/data/people.ttl"));			
 		}
 		finally {
 			aConn.close();
