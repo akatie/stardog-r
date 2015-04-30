@@ -23,6 +23,33 @@ You'll need to install the Java/R Interface (JRI). Please follow the instruction
 6. R calls are available under the `stardog: <tag:stardog:api:>` namespace. For instance, this SPARQL query executes the Wilcoxon signed-rank test over two given RDF Data Cube slices:
 
    `./stardog query mydb "prefix stardog: <tag:stardog:api:> prefix eg: <http://example.org/ns#> select ?foo where { bind(stardog:R(\"wilcox.test\", eg:slice1, eg:slice2, eg:height) as ?foo)}"`
+   
+## Motivation
+
+Basically we pretend to cover transformation of Linked Data in the Web dataspace, in one single SPARQL query. An example would be transforming the following set of observations so they become dimensionally comparable:
+
+:o1 a qb:Observation ;
+    maritalstatus:maritalStatus maritalstatus:single ;
+    sdmx-dimension:age sdmx-code:12-to-18 ;
+    sdmx-dimension:sex sdmx-code:sex-F ;
+    sdmx-dimension:refArea dbpedia:Barcelona ;
+    sdmx-dimension:refTime "1991-01-01"^^xsd:date ;
+    :population "12"^^xml:decimal .
+
+:o2 a qb:Observation ;
+    maritalstatus:maritalStatus maritalstatus:single ;
+    sdmx-dimension:age sdmx-code:12-to-14 ;
+    sdmx-dimension:sex sdmx-code:sex-F ;
+    sdmx-dimension:refArea dbpedia:Barcelona ;
+    sdmx-dimension:refTime "2001-01-01"^^xsd:date ;
+    :population "142"^^xml:decimal .
+
+:o3 a qb:Observation ;
+    maritalstatus:maritalStatus maritalstatus:single ;
+    sdmx-dimension:age sdmx-code:14-to-18 ;
+    sdmx-dimension:refArea dbpedia:Catalonia ;
+    sdmx-dimension:refTime "2011-01-01"^^xsd:date ;
+    :population "84"^^xml:decimal .
 
 ## Requirements
 
