@@ -5,6 +5,7 @@ com.complexible.stardog.plan.aggregates.MinRCustom
 com.complexible.stardog.plan.aggregates.Sd
 com.complexible.stardog.plan.aggregates.Var
 com.complexible.stardog.plan.aggregates.Cov
+com.complexible.stardog.plan.aggregates.Predict
 com.complexible.stardog.plan.filter.functions.Abs
 com.complexible.stardog.plan.filter.functions.Sqrt
 com.complexible.stardog.plan.filter.functions.Ceiling

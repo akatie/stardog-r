@@ -643,9 +643,40 @@ public class TestRAggregates {
 //			aConn.close();
 //		}
 //	}
+//	
+//	@Test
+//	public void TestCov() throws Exception {
+//		final Connection aConn = ConnectionConfiguration.to(DB)
+//		                                                .credentials("admin", "admin")
+//		                                                .connect();
+//		try {
+//
+//			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
+//									"PREFIX sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#> " +
+//									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
+//									"SELECT (stardog:cov(?height, ?age) AS ?c) " +
+//									"WHERE { ?s leri:height ?height ; sdmx-dimension:age ?age } ";
+//			System.out.println("Executing query: " + aQuery);
+//
+//			final TupleQueryResult aResult = aConn.select(aQuery).execute();
+//			
+//			try {
+//				System.out.println("Query result:");
+//				while (aResult.hasNext()) {
+//					System.out.println(aResult.next().getValue("c").stringValue());
+//				}
+//			}
+//			finally {
+//				aResult.close();
+//			}
+//		}
+//		finally {
+//			aConn.close();
+//		}
+//	}
 	
 	@Test
-	public void TestCov() throws Exception {
+	public void TestPredict() throws Exception {
 		final Connection aConn = ConnectionConfiguration.to(DB)
 		                                                .credentials("admin", "admin")
 		                                                .connect();
@@ -654,8 +685,9 @@ public class TestRAggregates {
 			final String aQuery = "PREFIX stardog: <tag:stardog:api:> " +
 									"PREFIX sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#> " +
 									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
-									"SELECT (stardog:cov(?height, ?age) AS ?c) " +
-									"WHERE { ?s leri:height ?height ; sdmx-dimension:age ?age } ";
+									"SELECT (stardog:predict(?age) AS ?page) " +
+									"WHERE { ?s leri:height ?height . "
+									+ " OPTIONAL { ?s sdmx-dimension:age ?age . }  } ";
 			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
@@ -663,7 +695,11 @@ public class TestRAggregates {
 			try {
 				System.out.println("Query result:");
 				while (aResult.hasNext()) {
-					System.out.println(aResult.next().getValue("c").stringValue());
+					try {
+						System.out.println(aResult.next().getValue("page").stringValue());
+					} catch (NullPointerException e) {
+						System.out.println("NA");
+					}
 				}
 			}
 			finally {
@@ -674,5 +710,6 @@ public class TestRAggregates {
 			aConn.close();
 		}
 	}
+	
 
 }
