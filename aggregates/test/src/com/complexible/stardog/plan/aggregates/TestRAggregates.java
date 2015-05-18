@@ -18,16 +18,19 @@ package com.complexible.stardog.plan.aggregates;
 import java.io.File;
 
 import com.complexible.common.protocols.server.Server;
+import com.complexible.common.rdf.query.resultio.TextTableQueryResultWriter;
 import com.complexible.stardog.Stardog;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
 import com.complexible.stardog.api.admin.AdminConnection;
 import com.complexible.stardog.api.admin.AdminConnectionConfiguration;
 import com.complexible.stardog.protocols.snarl.SNARLProtocolConstants;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openrdf.query.TupleQueryResult;
+import org.openrdf.query.resultio.QueryResultIO;
 
 /**
  * <p></p>
@@ -686,25 +689,27 @@ public class TestRAggregates {
 									"PREFIX sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#> " +
 									"PREFIX leri: <http://lod.cedar-project.nl:8888/linked-edit-rules/resource/> " +			
 									"SELECT (stardog:predict(?age) AS ?page) " +
-									"WHERE { ?s leri:height ?height . "
-									+ " OPTIONAL { ?s sdmx-dimension:age ?age . }  } ";
+									"WHERE { ?s leri:height ?height . } ";
 			System.out.println("Executing query: " + aQuery);
 
 			final TupleQueryResult aResult = aConn.select(aQuery).execute();
 			
-			try {
-				System.out.println("Query result:");
-				while (aResult.hasNext()) {
-					try {
-						System.out.println(aResult.next().getValue("page").stringValue());
-					} catch (NullPointerException e) {
-						System.out.println("NA");
-					}
-				}
-			}
-			finally {
-				aResult.close();
-			}
+			//QueryResultIO.write(aResult, TextTableQueryResultWriter.FORMAT, System.out);
+//			try {
+//				System.out.println("Query result:");
+//				while (aResult.hasNext()) {
+//					try {
+//						System.out.println(aResult.next().getValue("page").stringValue());
+//					} catch (NullPointerException e) {
+//						System.out.println("NA");
+//					}
+//				}
+//			} catch (NullPointerException e) {
+//				System.err.println(e.getMessage());
+//			}
+//			finally {
+//				aResult.close();
+//			}
 		}
 		finally {
 			aConn.close();
