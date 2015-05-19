@@ -4,14 +4,12 @@
 
 package com.complexible.stardog.plan.aggregates;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.complexible.common.openrdf.query.TupleQueryResult;
 import com.complexible.common.rdf.model.Namespaces;
-import com.complexible.common.rdf.query.resultio.TextTableQueryResultWriter;
 import com.complexible.stardog.StardogException;
 import com.complexible.stardog.api.Connection;
 import com.complexible.stardog.api.ConnectionConfiguration;
@@ -24,16 +22,11 @@ import com.complexible.stardog.plan.filter.ExpressionVisitor;
 import com.complexible.stardog.plan.filter.ValueSolution;
 import com.google.common.base.Preconditions;
 
-import org.openrdf.model.Literal;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.ValueFactoryImpl;
 import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.query.resultio.QueryResultIO;
 import org.rosuda.JRI.Rengine;
-
-import static com.complexible.common.rdf.model.Values.literal;
 
 /**
  * <p>Prediction custom aggregate through the R interface</p>
@@ -44,7 +37,8 @@ import static com.complexible.common.rdf.model.Values.literal;
  */
 public final class Predict extends AbstractExpression implements Aggregate {	
 	protected Rengine re = null;
-	protected List<Double> rCurr = null;
+	protected List<Double> rCurr = null; // Values for the current dimension
+	protected List<URI> rDims = null; // Dimensions in the DSD
 	
 	public Predict() {
 		super();
@@ -116,6 +110,8 @@ public final class Predict extends AbstractExpression implements Aggregate {
 
 	@Override
 	public void initialize() {
+		rDims = new ArrayList<URI>();
+		
 		System.out.println("INITIALIZING Predict MODULE...");
 		// To infer a model we use the dimension data in the DSD
 		// Using SNARL API to open connection to the db
@@ -125,9 +121,8 @@ public final class Predict extends AbstractExpression implements Aggregate {
 		    aConn = ConnectionConfiguration
 		    		.to("testRAggregates")
 		    		.credentials("admin", "admin")
-		    		.server("snarl://localhost:5820")
 		    		.connect();
-		    System.out.println("Connected. Sending query...");
+		    System.out.println("Connected. Sending DSD query...");
 		    SelectQuery dsdQuery = aConn.select("PREFIX qb: <http://purl.org/linked-data/cube#> "
 		    		+ "SELECT ?dim WHERE { "
 		    		+ "?dsd a qb:DataStructureDefinition . "
@@ -136,15 +131,18 @@ public final class Predict extends AbstractExpression implements Aggregate {
 		    System.out.println("Query sent to the server.");
 		    try {
 		    	System.out.println("Retrieving dimensions from the DSD...");
-		    	QueryResultIO.write(aResult, TextTableQueryResultWriter.FORMAT, System.out);
+		    	while (aResult.hasNext()) {
+		    		URI dim = ValueFactoryImpl.getInstance().createURI(aResult.next().getValue("dim").toString());
+		    		rDims.add(dim);
+		    	}
+		    	for (URI u : rDims) {
+		    		System.out.println(u);
+		    	}
 		    	aResult.close();
-		    } catch (IOException e) {
-		    	System.err.println(e.getMessage());
-		    } catch (TupleQueryResultHandlerException e) {
-		    	System.err.println(e.getMessage());
 		    } catch (QueryEvaluationException e) {
 		    	System.err.println(e.getMessage());
 		    }
+		    // Retrieve values for each dimension
 		} catch (StardogException e) {
 		    System.err.println(e.getMessage());
 		}
