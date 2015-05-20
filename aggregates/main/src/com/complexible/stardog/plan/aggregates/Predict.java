@@ -4,9 +4,13 @@
 
 package com.complexible.stardog.plan.aggregates;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.complexible.common.openrdf.query.TupleQueryResult;
 import com.complexible.common.rdf.model.Namespaces;
@@ -22,11 +26,12 @@ import com.complexible.stardog.plan.filter.ExpressionVisitor;
 import com.complexible.stardog.plan.filter.ValueSolution;
 import com.google.common.base.Preconditions;
 
+import org.apache.shiro.UnavailableSecurityManagerException;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.ValueFactoryImpl;
 import org.openrdf.query.QueryEvaluationException;
-import org.rosuda.JRI.Rengine;
+import org.rosuda.REngine.*;
 
 /**
  * <p>Prediction custom aggregate through the R interface</p>
@@ -36,9 +41,10 @@ import org.rosuda.JRI.Rengine;
  * @version 3.0
  */
 public final class Predict extends AbstractExpression implements Aggregate {	
-	protected Rengine re = null;
-	protected List<Double> rCurr = null; // Values for the current dimension
+	protected REngine eng = null;
+	protected List<Value> rCurr = null; // Values for the current dimension
 	protected List<URI> rDims = null; // Dimensions in the DSD
+	protected HashMap<URI,List<Value>> rVals = null; // Map with Array<Value> for each dimension
 	
 	public Predict() {
 		super();
@@ -111,46 +117,113 @@ public final class Predict extends AbstractExpression implements Aggregate {
 	@Override
 	public void initialize() {
 		rDims = new ArrayList<URI>();
+		rCurr = new ArrayList<Value>();
+		rVals = new HashMap<URI,List<Value>>();
 		
-		System.out.println("INITIALIZING Predict MODULE...");
+		// System.out.println("INITIALIZING Predict MODULE...");
 		// To infer a model we use the dimension data in the DSD
 		// Using SNARL API to open connection to the db
 		Connection aConn = null;
 		try {
-			System.out.println("Connecting to server...");
+			// System.out.println("Connecting to server...");
 		    aConn = ConnectionConfiguration
 		    		.to("testRAggregates")
 		    		.credentials("admin", "admin")
 		    		.connect();
-		    System.out.println("Connected. Sending DSD query...");
+		    // System.out.println("Connected. Sending DSD query...");
 		    SelectQuery dsdQuery = aConn.select("PREFIX qb: <http://purl.org/linked-data/cube#> "
 		    		+ "SELECT ?dim WHERE { "
 		    		+ "?dsd a qb:DataStructureDefinition . "
 		    		+ "?dsd qb:component [ qb:dimension ?dim ] .}");
 		    TupleQueryResult aResult = dsdQuery.execute();
-		    System.out.println("Query sent to the server.");
+		    // System.out.println("Query sent to the server.");
 		    try {
 		    	System.out.println("Retrieving dimensions from the DSD...");
 		    	while (aResult.hasNext()) {
 		    		URI dim = ValueFactoryImpl.getInstance().createURI(aResult.next().getValue("dim").toString());
-		    		rDims.add(dim);
+		    		// Retrieve values for each dimension
+				    SelectQuery dataQuery = aConn.select("PREFIX qb: <http://purl.org/linked-data/cube#> "
+				    		+ "SELECT ?val WHERE { "
+				    		+ "?obs a qb:Observation . "
+				    		+ "?obs ?dim ?val .}");
+				    dataQuery.parameter("dim", dim);
+				    TupleQueryResult dataResult = dataQuery.execute();
+				    ArrayList<Value> cValues = new ArrayList<Value>();
+				    while (dataResult.hasNext()) {
+				    	Value cVal = dataResult.next().getValue("val");
+				    	cValues.add(cVal);
+				    }
+		    		rVals.put(dim, cValues);
+		    		dataResult.close();
 		    	}
-		    	for (URI u : rDims) {
-		    		System.out.println(u);
-		    	}
-		    	aResult.close();
+		    	System.out.println(Arrays.toString(rVals.entrySet().toArray()));
+		    	aResult.close();	
 		    } catch (QueryEvaluationException e) {
 		    	System.err.println(e.getMessage());
 		    }
-		    // Retrieve values for each dimension
+		    aConn.close();
 		} catch (StardogException e) {
 		    System.err.println(e.getMessage());
 		}
 		
-		// Initialize R engine
-		re = Rengine.getMainEngine();
-		if (re == null) {
-			re = new Rengine(new String[] {"--vanilla"}, false, null);
+		// Initialize R engine -- convert Java HashMap to R data.frame
+		String args[] = {"--vanilla"};
+		try {
+			eng = REngine.getLastEngine();
+			if (eng == null) {
+				eng = REngine.engineForClass("org.rosuda.REngine.JRI.JRIEngine", args, new REngineStdOutput(), false);
+			}
+			RList l = new RList();
+			l.put("a",new REXPInteger(new int[] { 0,1,2,3}));
+			l.put("b",new REXPDouble(new double[] { 0.5,1.2,2.3,3.0}));
+			System.out.println("  assign x=pairlist");
+			eng.assign("x", new REXPList(l));
+			System.out.println("  assign y=vector");
+			eng.assign("y", new REXPGenericVector(l));
+			System.out.println("  assign z=data.frame");
+			eng.assign("z", REXP.createDataFrame(l));
+			System.out.println("  pull all three back to Java");
+
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (REngineException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (REXPMismatchException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
+		
+		// Iterate all the HashMap
+		Iterator it = rVals.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        String colName = (String) pair.getKey();
+	        List<Value> colVals = (List<Value>) pair.getValue();
+	        double dColVals[] = new double[colVals.size()];
+	        String sColVals[] = new String[colVals.size()];
+	        for (int i = 0; i < colVals.size(); i++) {
+	        	try {
+	        		dColVals[i] = Double.parseDouble(((Value) colVals).stringValue());
+	        		
+		    	} catch (NumberFormatException e) {
+		    		sColVals[i] = ((Value) colVals).stringValue();
+		    	}	        		
+	        }
+	        it.remove(); // avoids a ConcurrentModificationException
+	    }
+		
 	}
 }
