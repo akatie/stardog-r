@@ -26,7 +26,7 @@ You'll need to install the Java/R Interface (JRI). Please follow the instruction
    
 ## Motivation
 
-Basically we pretend to cover transformation of Linked Data in the Web dataspace, in one single SPARQL query. An example would be transforming the following set of observations so they become dimensionally comparable:
+Basically we pretend to cover transformation and analysis of Linked Data in the Web dataspace, with full statistical support and in one single SPARQL query. An example would be transforming the following set of observations so they become dimensionally comparable:
 
 ```
 :o1 a qb:Observation ;
@@ -52,6 +52,8 @@ Basically we pretend to cover transformation of Linked Data in the Web dataspace
    sdmx-dimension:refTime "2011-01-01"^^xsd:date ;
    :population "84"^^xml:decimal .
 ```
+
+But we also aim at executing variable coding, dataset cleansing and regression analysis natively in SPARQL.
 
 ## Requirements
 
